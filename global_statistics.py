@@ -3,7 +3,12 @@ import pandas as pd
 import numpy as np
 
 class GlobalStatistic(ABC):
-    
+    '''
+    GlobalStatistic is supposed to evaluate some statistic that need entire 
+    dataset to be calculated. It may evaluate it iteratively if dataset is too
+    big and devided in chunks. In this case the estimation looks like learning,
+    when every new piece of data makes estimation better.
+    '''
     @abstractmethod
     def __init__(self, feature_codes):
         # Set of features codes we are interested in

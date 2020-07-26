@@ -3,7 +3,13 @@ import pandas as pd
 import numpy as np
 
 class LocalStatistic(ABC):
-    
+    '''
+    LocalStatistic subclass is supposed to calculate some statistic for each row
+    of the dataframe. 
+    After invoking add_statistic method LocalStatistic calculates statistic for 
+    each row and adds a column with values of this statistic to the dataframe.
+
+    '''    
     @abstractmethod
     def __init__(self, feature_codes):
         self._feature_codes = feature_codes
