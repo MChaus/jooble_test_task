@@ -19,7 +19,7 @@ All statistics that should have been calculated can be divided in 2 groups:
   2) Second group contains statistics that need only one row for evaluation. Such statistic is ```max_index```. 
      For calculation of these statistics I created abstract class ```LocalStatistic```. Each subclass implements 
      some statistic that should be calculated. In our case - ```max_index```, ```max_abs_mean_diff```, ```z_score```. 
-     These classes receive datafrabe, calculate statistic for each row and add a column with this statistic to the dataframe.
+     These classes receive dataframe, calculate statistic for each row and add a column with this statistic to the dataframe.
  
  I took into consideration all the factors mentioned in the task:
  1) __The ability to add new features in the future.__ My classes work with different features with different dimensions.
