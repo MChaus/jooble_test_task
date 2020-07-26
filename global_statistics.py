@@ -5,26 +5,24 @@ import numpy as np
 class GlobalStatistic(ABC):
     
     @abstractmethod
-    def __init__(self, feature_codes, file_path, chunk_size):
+    def __init__(self, feature_codes):
         # Set of features codes we are interested in
         self._feature_codes = feature_codes
-        self._file_path = file_path
-        self._chunk_size = chunk_size
-        self._file_reader = pd.read_csv(self._file_path, 
-                                        iterator=True, 
-                                        chunksize=self._chunk_size, 
-                                        delimiter='\t')
         # Value of statistic for each feature
-        self._statistic = None
-        self._step_count = 0
+        self._statistic = dict.fromkeys(self._feature_codes, None)
+        # Number of records we observed for each feature
+        self._n = dict.fromkeys(self._feature_codes, 0)
     
-    def calculate_statistic(self):
+    def calculate_statistic_from_file(self, file_path, chunk_size):
+        file_reader = pd.read_csv(file_path, 
+                                  iterator=True, 
+                                  chunksize=chunk_size, 
+                                  delimiter='\t')
         while True:
             try:
-                self._step_count += 1
-                chunk = next(self._file_reader)
+                chunk = next(file_reader)
                 chunk = self._prepare_chunk(chunk)
-                self._improve_estimation(chunk)
+                self.improve_estimation(chunk)
             except StopIteration:
                 break
         return self.statistic
@@ -39,7 +37,7 @@ class GlobalStatistic(ABC):
         return features
     
     @abstractmethod
-    def _improve_estimation(self, chunk):
+    def improve_estimation(self, chunk):
         '''
         Recalculate estimations with impact of the chunk.
         
@@ -55,13 +53,10 @@ class GlobalStatistic(ABC):
     
 class GlobalMean(GlobalStatistic):
     
-    def __init__(self, feature_codes, file_path, chunk_size):
-        super().__init__(feature_codes, file_path, chunk_size)
-        # Number of records for each feature
-        self._n = dict.fromkeys(self._feature_codes, 0)
-        self._statistic =  dict.fromkeys(self._feature_codes, None)
+    def __init__(self, feature_codes):
+        super().__init__(feature_codes)
     
-    def _improve_estimation(self, chunk):
+    def improve_estimation(self, chunk):
         for feature in self._feature_codes:
             mini_chunk = chunk[chunk[0] == feature]
             mini_chunk = mini_chunk[1].str.split(',', expand=True)
@@ -94,14 +89,11 @@ class GlobalMean(GlobalStatistic):
 
 class GlobalStd(GlobalStatistic):
     
-    def __init__(self, mean, feature_codes, file_path, chunk_size):
-        super().__init__(feature_codes, file_path, chunk_size)
+    def __init__(self, mean, feature_codes):
+        super().__init__(feature_codes)
         self._mean = mean
-        # Number of records for each feature
-        self._n = dict.fromkeys(self._feature_codes, 0)
-        self._statistic =  dict.fromkeys(self._feature_codes, None)
     
-    def _improve_estimation(self, chunk):
+    def improve_estimation(self, chunk):
         for feature in self._feature_codes:
             mini_chunk = chunk[chunk[0] == feature]
             mini_chunk = mini_chunk[1].str.split(',', expand=True)
