@@ -42,6 +42,10 @@ def prepare_df(df):
             })
     df = df.drop(['stand'], axis = 1)
     df = df.drop(['features'], axis=1)
+    
+    cols = df.columns.tolist()
+    cols = cols[0:1] + cols[3:] + cols[1:3]
+    df = df[cols]
     return df
     
 def main():
