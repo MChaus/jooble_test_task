@@ -60,7 +60,7 @@ class LocalStatisticTest(unittest.TestCase):
         max_index = MaxAbsMeanDiff(features_of_interest, mean_test)
         
         df = pd.read_csv(file_path, delimiter='\t')
-        df = max_index.calculate_statistic(df)
+        df = max_index.add_statistic(df)
         
         pd.testing.assert_series_equal(df['max_abs_mean_diff'], mamd_test)
         
@@ -70,7 +70,7 @@ class LocalStatisticTest(unittest.TestCase):
         z_score = ZScore(features_of_interest, mean_z_test, std_z_test)
         
         df = pd.read_csv(file_path, delimiter='\t')
-        df = z_score.calculate_statistic(df)
+        df = z_score.add_statistic(df)
         
         score = self._vectorize(df['stand'])
         np.testing.assert_almost_equal(score, z_score_test)

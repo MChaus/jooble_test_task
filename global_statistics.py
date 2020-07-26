@@ -24,7 +24,7 @@ class GlobalStatistic(ABC):
                 self.improve_estimation(chunk)
             except StopIteration:
                 break
-        return self.statistic
+        return self.value
 
     def _prepare_chunk(self, chunk):
         '''
@@ -45,7 +45,7 @@ class GlobalStatistic(ABC):
     
     @property
     @abstractmethod
-    def statistic(self):
+    def value(self):
         pass
     
     
@@ -82,7 +82,7 @@ class GlobalMean(GlobalStatistic):
         self._n[feature] += mini_chunk.shape[0]
     
     @property
-    def statistic(self):
+    def value(self):
         return self._statistic
     
 
@@ -132,7 +132,7 @@ class GlobalStd(GlobalStatistic):
         return variance
     
     @property
-    def statistic(self):
+    def value(self):
         ''' Return corrected std
         '''
         std = dict()

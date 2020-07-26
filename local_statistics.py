@@ -9,7 +9,7 @@ class LocalStatistic(ABC):
         self._feature_codes = feature_codes
         
     @abstractmethod
-    def calculate_statistic(self, chunk):
+    def add_statistic(self, chunk):
         pass
     
     
@@ -17,7 +17,7 @@ class MaxIndex(LocalStatistic):
     def __init__ (self, feature_codes):
         super().__init__(feature_codes)
     
-    def calculate_statistic(self, chunk):
+    def add_statistic(self, chunk):
         chunk['max_index'] = chunk.apply(self._max_index, axis=1)
         return chunk
             
@@ -35,8 +35,8 @@ class MaxAbsMeanDiff(LocalStatistic):
         self._max_index = MaxIndex(feature_codes)
         self._mean = mean
     
-    def calculate_statistic(self, chunk):
-        chunk = self._max_index.calculate_statistic(chunk)
+    def add_statistic(self, chunk):
+        chunk = self._max_index.add_statistic(chunk)
         chunk['max_abs_mean_diff'] = chunk.apply(self._max_abs_mean_diff, axis=1)
         return chunk
         
@@ -59,7 +59,7 @@ class ZScore(LocalStatistic):
         self._mean = mean
         self._std = std
         
-    def calculate_statistic(self, chunk):
+    def add_statistic(self, chunk):
         chunk["stand"] = chunk.apply(self._z_score, axis=1)
         return chunk
     
