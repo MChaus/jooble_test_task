@@ -33,12 +33,9 @@ class GlobalStatisticTest(unittest.TestCase):
 
         for chunk_size in sizes:
             with self.subTest(chunk_size=chunk_size):
-                mean = GlobalMean(
-                    features_of_interest,
-                    file_path,
-                    chunk_size
-                )
-                mean_train = mean.calculate_statistic()
+                mean = GlobalMean(features_of_interest)
+                mean_train = mean.calculate_statistic_from_file(file_path,
+                                                                chunk_size)
                 self.assert_equal_dicts(mean_train, mean_test)
                 
     def test_global_std(self):
@@ -50,11 +47,10 @@ class GlobalStatisticTest(unittest.TestCase):
             with self.subTest(chunk_size=chunk_size):
                 std = GlobalStd(
                     mean_test,
-                    features_of_interest,
-                    file_path,
-                    chunk_size
+                    features_of_interest
                 )
-                std_train = std.calculate_statistic()
+                std_train = std.calculate_statistic_from_file(file_path,
+                                                              chunk_size)
                 self.assert_equal_dicts(std_train, std_test)
     
     def test_global_variance(self):
@@ -66,11 +62,10 @@ class GlobalStatisticTest(unittest.TestCase):
             with self.subTest(chunk_size=chunk_size):
                 std = GlobalStd(
                     mean_test,
-                    features_of_interest,
-                    file_path,
-                    chunk_size
+                    features_of_interest
                 )
-                std.calculate_statistic()
+                std.calculate_statistic_from_file(file_path,
+                                                  chunk_size)
                 variance_train = std.variance
                 self.assert_equal_dicts(variance_train, variance_test)
                 
