@@ -21,7 +21,6 @@ class GlobalStatistic(ABC):
         while True:
             try:
                 chunk = next(file_reader)
-                chunk = self._prepare_chunk(chunk)
                 self.improve_estimation(chunk)
             except StopIteration:
                 break
@@ -31,7 +30,6 @@ class GlobalStatistic(ABC):
         '''
         Return two columns - feature code with numeric values
         '''        
-        
         features = chunk['features'].str.split(',', n=1, expand=True)
         features = features[features[0].isin(self._feature_codes)]
         return features
@@ -57,6 +55,7 @@ class GlobalMean(GlobalStatistic):
         super().__init__(feature_codes)
     
     def improve_estimation(self, chunk):
+        chunk = self._prepare_chunk(chunk)
         for feature in self._feature_codes:
             mini_chunk = chunk[chunk[0] == feature]
             mini_chunk = mini_chunk[1].str.split(',', expand=True)
@@ -94,6 +93,7 @@ class GlobalStd(GlobalStatistic):
         self._mean = mean
     
     def improve_estimation(self, chunk):
+        chunk = self._prepare_chunk(chunk)
         for feature in self._feature_codes:
             mini_chunk = chunk[chunk[0] == feature]
             mini_chunk = mini_chunk[1].str.split(',', expand=True)
