@@ -6,7 +6,7 @@ The code may be divided in three parts:
   2) Modules ```local_statistics.py``` and ```global_statistics.py``` contain classes that calculate statistics.
   3) Folder ```unittest``` contains data for testing along with test classes.
 
-To generate ```test_proc.tsv``` invoke ```python generate.py``` in cmd.
+To generate ```test_proc.tsv``` invoke ```python generate_file.py``` in cmd.
 
 ## Details of implementation
 All statistics that should have been calculated can be divided in 2 groups:
