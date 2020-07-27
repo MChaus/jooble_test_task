@@ -30,7 +30,7 @@ All statistics that should have been calculated can be divided in 2 groups:
  3) __The ability to add new statistics in the future.__ Each new statistic may be created as implementation of appropriate 
  abstraction (```GlobalStatistic``` or ```LocalStatistic```).
  
- ## Ways of improvement
+ ## Ways to improve
  During development I was thinking about improvements that may speed up performance of my solution. In case of large 
  data it may be important. 
   1) First of all python is known for its slow I/O operations. So it may be beneficial to use 
